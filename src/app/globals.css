@@ -3,7 +3,7 @@
 :root {
   --background: #161616;
   --foreground: #ffffff;
-  --hero-ink: 255 255 255;
+  --hero-ink: 80 245 137;
 }
 
 @theme inline {

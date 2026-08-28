@@ -96,22 +96,18 @@ function buildField(canvas: HTMLCanvasElement): Field | null {
       const y = row * GRID;
       const centerX = x + SQUARE / 2;
       const centerY = y + SQUARE / 2;
-      const radial =
-        1 -
-        (Math.hypot(centerX - focusX, (centerY - focusY) * 1.3) / radius) *
-          1.35;
-      const edge = Math.max(
-        0,
-        Math.min(
-          1,
-          x / 64,
-          y / 64,
-          (bounds.width - x - SQUARE) / 64,
-          (bounds.height - y - SQUARE) / 64,
-        ),
+      const distance =
+        Math.hypot(centerX - focusX, (centerY - focusY) * 1.3) / radius;
+      const radial = Math.max(0.38, 1 - distance * 0.78);
+      const edgeDistance = Math.min(
+        x,
+        y,
+        bounds.width - x - SQUARE,
+        bounds.height - y - SQUARE,
       );
+      const edge = 0.55 + 0.45 * Math.max(0, Math.min(1, edgeDistance / 32));
       const fade = radial * edge;
-      if (fade <= 0.03) continue;
+      if (fade <= 0.01) continue;
 
       const noise = seeded(column, row);
       tiles.push({
@@ -121,7 +117,7 @@ function buildField(canvas: HTMLCanvasElement): Field | null {
         centerY,
         key,
         fade,
-        base: isVisible ? (0.05 + 0.12 * noise) * fade * mobileOpacity : 0,
+        base: isVisible ? (0.07 + 0.15 * noise) * fade * mobileOpacity : 0,
         latent: isVisible ? 0 : (0.05 + 0.09 * noise) * fade * mobileOpacity,
       });
     }
